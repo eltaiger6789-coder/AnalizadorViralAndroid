@@ -17,6 +17,6 @@ class MainActivity : AppCompatActivity() {
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
 
-        webView.loadUrl("AQUI_PONDREMOS_LA_URL_DE_TU_HUGGING_FACE_SPACE")
+        webView.loadUrl("https://huggingface.co/spaces/Eltaiger/analizador-viral")
     }
 }
