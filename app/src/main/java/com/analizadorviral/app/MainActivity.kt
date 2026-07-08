@@ -28,8 +28,7 @@ class MainActivity : Activity() {
             allowFileAccess = true
             allowContentAccess = true
             cacheMode = WebSettings.LOAD_DEFAULT
-            mixedContentMode =
-                WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+            mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
         }
 
         webView.webViewClient = WebViewClient()
@@ -38,7 +37,7 @@ class MainActivity : Activity() {
         setContentView(webView)
 
         webView.loadUrl(
-            "https://little-sound-9f77.eltaiger6789.workers.dev"
+            "https://eltaiger-noya-social-manager.hf.space"
         )
     }
 
