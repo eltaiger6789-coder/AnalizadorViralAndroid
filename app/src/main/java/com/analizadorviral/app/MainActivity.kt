@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.webkit.CookieManager
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
@@ -13,16 +15,36 @@ class MainActivity : Activity() {
 
     private lateinit var webView: WebView
     private var fileCallback: ValueCallback<Array<Uri>>? = null
+    private val FILE_CHOOSER_REQUEST = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         webView = WebView(this)
 
-        webView.settings.javaScriptEnabled = true
-        webView.settings.domStorageEnabled = true
-        webView.settings.allowFileAccess = true
-        webView.settings.allowContentAccess = true
+        CookieManager.getInstance().setAcceptCookie(true)
+        CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
+
+        webView.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            databaseEnabled = true
+
+            allowFileAccess = true
+            allowContentAccess = true
+
+            cacheMode = WebSettings.LOAD_DEFAULT
+            mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+
+            mediaPlaybackRequiresUserGesture = false
+
+            javaScriptCanOpenWindowsAutomatically = true
+            setSupportMultipleWindows(false)
+
+            userAgentString =
+                "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 " +
+                "(KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+        }
 
         webView.webViewClient = WebViewClient()
 
@@ -42,13 +64,15 @@ class MainActivity : Activity() {
                     type = "video/*"
                 }
 
-                startActivityForResult(intent, 100)
+                startActivityForResult(intent, FILE_CHOOSER_REQUEST)
 
                 return true
             }
         }
 
-        webView.loadUrl("https://huggingface.co/spaces/Eltaiger/analizador-viral")
+        webView.loadUrl(
+            "https://huggingface.co/spaces/Eltaiger/analizador-viral"
+        )
 
         setContentView(webView)
     }
@@ -61,15 +85,30 @@ class MainActivity : Activity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 100) {
-            val result = if (resultCode == RESULT_OK && data?.data != null) {
-                arrayOf(data.data!!)
-            } else {
-                null
-            }
+        if (requestCode == FILE_CHOOSER_REQUEST) {
+
+            val result =
+                if (resultCode == RESULT_OK && data?.data != null) {
+                    arrayOf(data.data!!)
+                } else {
+                    null
+                }
 
             fileCallback?.onReceiveValue(result)
             fileCallback = null
         }
+    }
+
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onDestroy() {
+        webView.destroy()
+        super.onDestroy()
     }
 }
