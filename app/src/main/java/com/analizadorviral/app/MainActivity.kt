@@ -1,4 +1,4 @@
-package com.analizadorviral.app
+package com.eltaiger.analizadorviral
 
 import android.app.Activity
 import android.os.Bundle
