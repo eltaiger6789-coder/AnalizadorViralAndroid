@@ -37,7 +37,7 @@ class MainActivity : Activity() {
         setContentView(webView)
 
         webView.loadUrl(
-            "https://huggingface.co/spaces/Eltaiger/noya-social-manager"
+        https://little-sound-9f77.eltaiger6789.workers.dev
         )
     }
 
