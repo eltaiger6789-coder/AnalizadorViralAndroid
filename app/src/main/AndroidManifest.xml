@@ -3,9 +3,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <application
         
-        android:label="Analizador Viral">
+        <application
+    android:icon="@drawable/icon"
+    android:label="Analizador Viral">
 
         <activity
             android:name=".MainActivity"
